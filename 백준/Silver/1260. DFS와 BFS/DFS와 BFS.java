@@ -1,0 +1,71 @@
+import java.util.*;
+
+public class Main {
+    static ArrayList<Integer>[] graph;
+    static boolean[] visited;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt(); // 정점 개수
+        int M = sc.nextInt(); // 간선 개수
+        int V = sc.nextInt(); // 시작 정점
+
+        // 그래프 초기화
+        graph = new ArrayList[N + 1];
+        for (int i = 1; i <= N; i++) {
+            graph[i] = new ArrayList<>();
+        }
+
+        // 간선 정보 입력
+        for (int i = 0; i < M; i++) {
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            graph[a].add(b);
+            graph[b].add(a);
+        }
+
+        // 오름차순 정렬
+        for (int i = 1; i <= N; i++) {
+            Collections.sort(graph[i]);
+        }
+
+        // DFS
+        visited = new boolean[N + 1];
+        dfs(V);
+        System.out.println();
+
+        // BFS
+        visited = new boolean[N + 1];
+        bfs(V);
+        System.out.println();
+    }
+
+    static void dfs(int node) {
+        visited[node] = true;
+        System.out.print(node + " ");
+
+        for (int next : graph[node]) {
+            if (!visited[next]) {
+                dfs(next);
+            }
+        }
+    }
+
+    static void bfs(int start) {
+        Queue<Integer> queue = new LinkedList<>();
+        visited[start] = true;
+        queue.offer(start);
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            System.out.print(node + " ");
+
+            for (int next : graph[node]) {
+                if (!visited[next]) {
+                    visited[next] = true;
+                    queue.offer(next);
+                }
+            }
+        }
+    }
+}
